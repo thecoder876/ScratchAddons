@@ -19,21 +19,21 @@ export default class Addon {
         return that._restart();
       },
     };
-  /**
-   * @todo Write the documentation.
-   */
+    /**
+     * @todo Write the documentation.
+     */
     this.auth = new Auth(this);
-  /**
-   * @todo Write the documentation.
-   */
+    /**
+     * @todo Write the documentation.
+     */
     this.account = new Account();
-  /**
-   * @todo Write the documentation.
-   */
+    /**
+     * @todo Write the documentation.
+     */
     this.fetch = fetch;
-  /**
-   * @todo Write the documentation.
-   */
+    /**
+     * @todo Write the documentation.
+     */
     this.settings = new Settings(this);
     if (permissions) {
       if (permissions.includes("notifications")) this.notifications = new Notifications(this);
