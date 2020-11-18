@@ -5,6 +5,7 @@ export default class Auth extends EventTarget {
   }
   /**
    * @todo Write the documentation.
+   * @category Category
    */
   get isLoggedIn() {
     return scratchAddons.globalState.auth.isLoggedIn;
