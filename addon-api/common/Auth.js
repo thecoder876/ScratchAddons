@@ -65,9 +65,6 @@ export default class Auth extends EventTarget {
   get scratchLang() {
     return scratchAddons.globalState.auth.scratchLang;
   }
-  /**
-   * @todo Write the documentation.
-   */
   _removeEventListeners() {
     scratchAddons.eventTargets.auth.splice(
       scratchAddons.eventTargets.auth.findIndex((x) => x === this),

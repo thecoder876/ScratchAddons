@@ -118,6 +118,7 @@ export default class Tab extends EventTarget {
    * Copy an PNG image.
    * @param {string} dataURL data url of the png image
    * @returns {Promise}
+   * @memberof Tab
    */
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));

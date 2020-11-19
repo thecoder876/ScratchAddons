@@ -45,9 +45,6 @@ export default class Addon {
       if (permissions.includes("badge")) this.badge = new Badge(this);
     }
   }
-  /**
-   * @todo Write the documentation.
-   */
   _kill() {
     this.auth._removeEventListeners();
     this.settings._removeEventListeners();
