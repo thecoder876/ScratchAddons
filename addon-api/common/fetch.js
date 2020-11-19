@@ -4,7 +4,7 @@
  * @export
  * @param {*} url
  * @param {*} [opts={}]
- * @return {*} 
+ * @return {*}
  */
 export default function fetch(url, opts = {}) {
   if (!opts.headers) opts.headers = {};
