@@ -9,7 +9,7 @@ export default class Account extends EventTarget {
   /**
    *
    *
-   * @return {*} 
+   * @return {*}
    * @memberof Account
    */
   getMsgCount() {
@@ -19,7 +19,7 @@ export default class Account extends EventTarget {
    *
    *
    * @param {*} args
-   * @return {*} 
+   * @return {*}
    * @memberof Account
    */
   getMessages(...args) {
@@ -28,11 +28,10 @@ export default class Account extends EventTarget {
   /**
    *
    *
-   * @return {*} 
+   * @return {*}
    * @memberof Account
    */
   clearMessages() {
     return scratchAddons.methods.clearMessages();
   }
 }
-
