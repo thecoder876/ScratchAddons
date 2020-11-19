@@ -5,7 +5,19 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
+/**
+ *
+ *
+ * @export
+ * @class Tab
+ * @extends {EventTarget}
+ */
 export default class Tab extends EventTarget {
+  /**
+   * Creates an instance of Tab.
+   * @param {*} info
+   * @memberof Tab
+   */
   constructor(info) {
     super();
     scratchAddons.eventTargets.tab.push(this);
@@ -30,6 +42,13 @@ export default class Tab extends EventTarget {
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
+  /**
+   *
+   *
+   * @param {*} url
+   * @return {*} 
+   * @memberof Tab
+   */
   loadScript(url) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -38,9 +57,23 @@ export default class Tab extends EventTarget {
       script.onload = resolve;
     });
   }
+  /**
+   *
+   *
+   * @return {*} 
+   * @memberof Tab
+   */
   getScratchVM() {
     return scratchAddons.methods.getScratchVM();
   }
+  /**
+   *
+   *
+   * @param {*} selector
+   * @param {*} [{ markAsSeen = false }={}]
+   * @return {*} 
+   * @memberof Tab
+   */
   waitForElement(selector, { markAsSeen = false } = {}) {
     const firstQuery = document.querySelectorAll(selector);
     for (const element of firstQuery) {
@@ -66,7 +99,10 @@ export default class Tab extends EventTarget {
     );
   }
   /**
+   *
    * @type {?string} editor mode (or null for non-editors).
+   * @readonly
+   * @memberof Tab
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
