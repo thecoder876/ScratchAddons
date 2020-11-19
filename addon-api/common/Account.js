@@ -1,5 +1,8 @@
 /**
  * @todo Should this be an event target?
+ * @export
+ * @class Account
+ * @extends {EventTarget}
  */
 export default class Account extends EventTarget {
   constructor() {
@@ -7,8 +10,6 @@ export default class Account extends EventTarget {
   }
 
   /**
-   *
-   *
    * @return {*}
    * @memberof Account
    */
@@ -16,8 +17,6 @@ export default class Account extends EventTarget {
     return scratchAddons.methods.getMsgCount();
   }
   /**
-   *
-   *
    * @param {*} args
    * @return {*}
    * @memberof Account
@@ -26,8 +25,6 @@ export default class Account extends EventTarget {
     return scratchAddons.methods.getMessages(...args);
   }
   /**
-   *
-   *
    * @return {*}
    * @memberof Account
    */
