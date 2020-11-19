@@ -7,7 +7,7 @@ const template = document.getElementById("scratch-addons");
 
 /**
  * addon.tab.*
- * 
+ *
  * @export
  * @class Tab
  * @extends {EventTarget}
