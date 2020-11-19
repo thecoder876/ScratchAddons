@@ -1,3 +1,10 @@
+/**
+ *
+ *
+ * @export
+ * @class ReduxHandler
+ * @extends {EventTarget}
+ */
 export default class ReduxHandler extends EventTarget {
   constructor() {
     super();
@@ -15,15 +22,20 @@ export default class ReduxHandler extends EventTarget {
   }
 
   /**
+   *
    * @type {object} redux state
+   * @readonly
+   * @memberof ReduxHandler
    */
   get state() {
     return __scratchAddonsRedux.state;
   }
 
+
   /**
    * Dispatches redux state change.
    * @param {object} payload payload to pass to redux.
+   * @memberof ReduxHandler
    */
   dispatch(payload) {
     if (!__scratchAddonsRedux.dispatch) throw new Error("Redux is unavailable");
