@@ -11,7 +11,7 @@ export default class Badge {
 
   /**
    *
-   *
+   * @todo Document
    * @memberof Badge
    */
   get text() {
@@ -20,7 +20,7 @@ export default class Badge {
 
   /**
    *
-   *
+   * @todo Document
    * @memberof Badge
    */
   get color() {
@@ -29,7 +29,7 @@ export default class Badge {
 
   /**
    *
-   *
+   * @todo Document
    * @memberof Badge
    */
   set text(val) {
@@ -38,7 +38,7 @@ export default class Badge {
   }
   /**
    *
-   *
+   * @todo Document
    * @memberof Badge
    */
   set color(val) {
