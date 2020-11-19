@@ -1,5 +1,5 @@
 /**
- * addon.tab.trap.*
+ * addon.tab.trap.* APIs
  *
  * @export
  * @class Trap
