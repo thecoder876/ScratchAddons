@@ -13,11 +13,6 @@ const template = document.getElementById("scratch-addons");
  * @extends {EventTarget}
  */
 export default class Tab extends EventTarget {
-  /**
-   * Creates an instance of Tab.
-   * @param {*} info
-   * @memberof Tab
-   */
   constructor(info) {
     super();
     scratchAddons.eventTargets.tab.push(this);
