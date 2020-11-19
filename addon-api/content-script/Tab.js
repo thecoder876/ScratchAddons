@@ -46,7 +46,7 @@ export default class Tab extends EventTarget {
    *
    *
    * @param {*} url
-   * @return {*} 
+   * @return {*}
    * @memberof Tab
    */
   loadScript(url) {
@@ -60,7 +60,7 @@ export default class Tab extends EventTarget {
   /**
    *
    *
-   * @return {*} 
+   * @return {*}
    * @memberof Tab
    */
   getScratchVM() {
@@ -71,7 +71,7 @@ export default class Tab extends EventTarget {
    *
    * @param {*} selector
    * @param {*} [{ markAsSeen = false }={}]
-   * @return {*} 
+   * @return {*}
    * @memberof Tab
    */
   waitForElement(selector, { markAsSeen = false } = {}) {

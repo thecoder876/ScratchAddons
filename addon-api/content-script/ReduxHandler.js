@@ -31,7 +31,6 @@ export default class ReduxHandler extends EventTarget {
     return __scratchAddonsRedux.state;
   }
 
-
   /**
    * Dispatches redux state change.
    * @param {object} payload payload to pass to redux.

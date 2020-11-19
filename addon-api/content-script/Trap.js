@@ -11,7 +11,7 @@ export default class Trap extends EventTarget {
   }
   /**
    * mapping for the Once objects trapped.
-   * @type {object.<string, *>} 
+   * @type {object.<string, *>}
    * @readonly
    * @memberof Trap
    */
@@ -21,7 +21,7 @@ export default class Trap extends EventTarget {
 
   /**
    * Symbol for accessing props of trapped objects.
-   * @type {symbol} 
+   * @type {symbol}
    * @readonly
    * @memberof Trap
    */
