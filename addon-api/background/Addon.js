@@ -6,6 +6,11 @@ import Badge from "./Badge.js";
 import Settings from "../common/Settings.js";
 
 export default class Addon {
+  /**
+   * Creates an instance of Addon.
+   * @param {*} info
+   * @memberof Addon
+   */
   constructor(info) {
     const { id, permissions } = info;
     this._timeouts = [];

@@ -8,27 +8,38 @@ export default class Badge {
       color: null,
     };
   }
+
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @memberof Badge
    */
   get text() {
     return this._text;
   }
+
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @memberof Badge
    */
   get color() {
     return this._color;
   }
+
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @memberof Badge
    */
   set text(val) {
     this._text = val;
     scratchAddons.localState.badges[this._addonId].text = val;
   }
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @memberof Badge
    */
   set color(val) {
     this._color = val;

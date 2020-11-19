@@ -1,28 +1,38 @@
+/**
+ * @todo Should this be an event target?
+ */
 export default class Account extends EventTarget {
-  /**
-   * @todo Write the documentation.
-   */
   constructor() {
     super();
   }
+
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @return {*} 
+   * @memberof Account
    */
   getMsgCount() {
     return scratchAddons.methods.getMsgCount();
   }
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @param {*} args
+   * @return {*} 
+   * @memberof Account
    */
   getMessages(...args) {
     return scratchAddons.methods.getMessages(...args);
   }
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @return {*} 
+   * @memberof Account
    */
   clearMessages() {
     return scratchAddons.methods.clearMessages();
   }
 }
 
-// TODO: should this be an event target?

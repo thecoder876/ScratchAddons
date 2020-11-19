@@ -5,7 +5,9 @@ export default class Settings extends EventTarget {
     scratchAddons.eventTargets.settings.push(this);
   }
   /**
-   * @todo Write the documentation.
+   *
+   *
+   * @memberof Settings
    */
   get(optionName) {
     const settingsObj = scratchAddons.globalState.addonSettings[this._addonId] || {};
@@ -13,9 +15,7 @@ export default class Settings extends EventTarget {
     if (value === undefined) throw "ScratchAddons exception: invalid setting ID";
     else return value;
   }
-  /**
-   * @todo Write the documentation.
-   */
+  
   _removeEventListeners() {
     scratchAddons.eventTargets.settings.splice(
       scratchAddons.eventTargets.settings.findIndex((x) => x === this),
