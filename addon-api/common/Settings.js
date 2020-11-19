@@ -1,3 +1,10 @@
+/**
+ *
+ *
+ * @export
+ * @class Settings
+ * @extends {EventTarget}
+ */
 export default class Settings extends EventTarget {
   constructor(addonObject) {
     super();
