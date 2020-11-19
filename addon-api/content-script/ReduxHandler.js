@@ -1,5 +1,5 @@
 /**
- *
+ * addon.tab.ReduxHandler.*
  *
  * @export
  * @class ReduxHandler
