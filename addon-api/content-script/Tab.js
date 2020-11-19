@@ -6,7 +6,7 @@ const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
 /**
- * addon.tab.*
+ * # addon.tab.*
  * 
  * @export
  * @class Tab
