@@ -1,3 +1,8 @@
+/**
+ * @namespace
+ * @export
+ * @class Badge
+ */
 export default class Badge {
   constructor(addonObject) {
     this._addonId = addonObject.self.id;
@@ -10,7 +15,6 @@ export default class Badge {
   }
 
   /**
-   *
    * @todo Document
    * @memberof Badge
    */
@@ -19,7 +23,6 @@ export default class Badge {
   }
 
   /**
-   *
    * @todo Document
    * @memberof Badge
    */
@@ -28,7 +31,6 @@ export default class Badge {
   }
 
   /**
-   *
    * @todo Document
    * @memberof Badge
    */
@@ -37,7 +39,6 @@ export default class Badge {
     scratchAddons.localState.badges[this._addonId].text = val;
   }
   /**
-   *
    * @todo Document
    * @memberof Badge
    */
