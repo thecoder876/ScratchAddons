@@ -8,6 +8,7 @@ const template = document.getElementById("scratch-addons");
 /**
  * # addon.tab.* APIs
  * Available only in userscripts
+ * @tutorial About-userscripts
  * @export
  * @class Tab
  * @extends {EventTarget}
