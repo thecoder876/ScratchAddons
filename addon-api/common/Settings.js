@@ -12,7 +12,7 @@ export default class Settings extends EventTarget {
     scratchAddons.eventTargets.settings.push(this);
   }
   /**
-   * Returns the user-specified value for that option, or the default specified in the addon manifest if the user didn't specify a value by themselves.
+   * ### addon.settings.get()
    * @throws if the specified option ID wasn't declared inside addon.json.
    * @returns the user-specified value for that option, or the default specified in the addon manifest if the user didn't specify a value by themselves.
    * @todo Document
