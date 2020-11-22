@@ -1,7 +1,7 @@
 /**
  * @namespace
  * @export
- * @class Badge
+ * @class addon.badge
  */
 export default class Badge {
   constructor(addonObject) {
@@ -16,7 +16,7 @@ export default class Badge {
 
   /**
    * @todo Document
-   * @memberof Badge
+   * @memberof addon.badge
    */
   get text() {
     return this._text;
@@ -24,7 +24,7 @@ export default class Badge {
 
   /**
    * @todo Document
-   * @memberof Badge
+   * @memberof addon.badge
    */
   get color() {
     return this._color;
@@ -32,7 +32,7 @@ export default class Badge {
 
   /**
    * @todo Document
-   * @memberof Badge
+   * @memberof addon.badge
    */
   set text(val) {
     this._text = val;
@@ -40,7 +40,7 @@ export default class Badge {
   }
   /**
    * @todo Document
-   * @memberof Badge
+   * @memberof addon.badge
    */
   set color(val) {
     this._color = val;
