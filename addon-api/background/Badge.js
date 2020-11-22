@@ -15,6 +15,7 @@ export default class Badge {
   }
 
   /**
+   * ``` addon.badge.* ```
    * @todo Document
    * @memberof addon.badge
    */

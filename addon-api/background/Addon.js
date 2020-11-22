@@ -5,6 +5,11 @@ import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
 import Settings from "../common/Settings.js";
 
+/**
+ * @hideconstructor
+ * @export
+ * @class addon
+ */
 export default class Addon {
   constructor(info) {
     const { id, permissions } = info;
