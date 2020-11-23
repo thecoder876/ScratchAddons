@@ -15,7 +15,8 @@ export default class Badge {
   }
 
   /**
-   * ``` addon.badge.* ```
+   * Example
+   * ``` console.log(addon.badge.text()) ```
    * @todo Document
    * @memberof addon.badge
    */
@@ -32,6 +33,8 @@ export default class Badge {
   }
 
   /**
+   * Example
+   * ``` addon.badge.text('Hello') ```
    * @todo Document
    * @memberof addon.badge
    */
