@@ -23,7 +23,8 @@ export default class ReduxHandler extends EventTarget {
 
   /**
    *
-   * @type {object} redux state
+   * @type {object} 
+   * redux state
    * @readonly
    * @memberof ReduxHandler
    */
