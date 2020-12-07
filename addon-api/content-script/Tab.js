@@ -96,7 +96,7 @@ export default class Tab extends EventTarget {
   }
   /**
    *
-   * @type {?string} 
+   * @type {?string}
    * editor mode (or null for non-editors).
    * @readonly
    * @memberof Tab
