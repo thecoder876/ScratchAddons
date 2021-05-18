@@ -1,0 +1,40 @@
+a:link,
+a:visited,
+.button.white,
+.news li h4,
+.intro-banner .intro-button,
+.comment .comment-body .comment-bottom-row .comment-reply,
+.studio-adder-section h3,
+.studio-project-tile .studio-project-title {
+  color: var(--scratchr2-linkColor);
+}
+a:hover,
+.news li:hover h4 {
+  color: var(--scratchr2-activeColor);
+}
+#navigation,
+#navigation .dropdown,
+#navigation .dropdown.with-arrow::before,
+.button,
+.addToStudio-modal-header,
+.user-projects-modal .user-projects-modal-title,
+.intro-banner .intro-container,
+.subactions .action-buttons .action-button,
+.title-banner.mod-messages,
+.download .download-header,
+.os-chooser .button.active,
+.studio-tab-nav .active > li,
+.user-projects-modal .user-projects-modal-nav li.active,
+.step .step-number-row .step-number,
+.title-banner.mod-blue-bg,
+.title-banner.mod-conference,
+#footer .inner .media li,
+.wedo .top-banner {
+  background-color: var(--scratchr2-primaryColor);
+}
+.banner-button {
+  background-color: #ffab1a;
+}
+a.social-messages-profile-link {
+  color: inherit;
+}

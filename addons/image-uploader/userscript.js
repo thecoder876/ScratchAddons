@@ -1,15 +1,13 @@
-import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
+import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-  await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
-
-  var projectUpload = false;
-  //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
     document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
 
   var textBox = document.querySelector("#id_body") || document.querySelector("#id_signature");
+  if (!textBox) return;
 
   //input  hidden)
   var uploadInput = document.createElement("input");
@@ -25,6 +23,8 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   var inputButton = document.createElement("a");
   inputButton.id = "uploadButton";
 
+  let progresselement;
+
   inputButton.title = msg("upload-image");
   inputButton.style.backgroundImage =
     "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABVUlEQVQ4jc3SO0tCYRzH8WcOegNtTb2BXkO1SNBuFyJqC1uihhqCNCIH8xKU8BzzcspQEskWC8IWcRCji8WxEnrSCKqh+dvQRTwcybZ+8J3+8Jn+QvyL2byHfDe9c7r/d8CdJlB5JVB5xeZOt10DcKV+gHazuVINQNi9iIUDizJfWdzsXhOQrDeXqOEz3vllvtbAngIgm822DKABJB6b27n/AeZST8zEqyylr4jmT3DsVi0A/a45rQxAOByme+2BzuUbRpOb3L4MIBbLSClNwHa5ua0SALFYDOeZTn/mnI6goke/pmvbsACCpUb+AsJfACASiTB1tULwfZF15Wb+eRDn27gFsHqE2Mh/5skhPDkANE2j/3iWseIkExcOhorD9F32moBh/4iwezEHIKVEKUWtVsMwDOr1OkopE9Bi34CUklAohK7rxONxotEomqa1Bfh++6QPwtgXjMvZERUAAAAASUVORK5CYII=')";
@@ -32,7 +32,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   inputButtonContainer.appendChild(inputButton);
 
   //add it
-  if (toolbar && textBox) {
+  if (toolbar) {
     //make sure that i can type here and that there's a textbox
     document.querySelector(".markItUpButton5").insertAdjacentElement("afterend", inputButtonContainer);
     document.body.appendChild(uploadInput);
@@ -86,15 +86,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   });
 
   textBox.addEventListener("dragenter", () => {
-    textBox.style.backgroundColor = "lightgrey";
+    textBox.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
   });
 
   textBox.addEventListener("dragleave", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("dragend", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("drop", (e) => {
@@ -124,35 +124,29 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   //cool functions below
   function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
-    if (pasteEvent.clipboardData == false) {
-      if (typeof callback == "function") {
-        callback(undefined);
-      }
+    if (!pasteEvent.clipboardData) {
+      callback(undefined);
     }
 
     var items = pasteEvent.clipboardData.items;
 
-    if (items == undefined) {
-      if (typeof callback == "function") {
-        callback(undefined);
-      }
+    if (!items) {
+      callback(undefined);
     }
 
     for (var i = 0; i < items.length; i++) {
       // Skip content if not image
-      if (items[i].type.indexOf("image") == -1) continue;
+      if (!items[i].type.includes("image")) continue;
       // Retrieve image on clipboard as blob
       var blob = items[i].getAsFile();
 
-      if (typeof callback == "function") {
-        callback(blob);
-      }
+      callback(blob);
     }
   }
   async function uploadAssetImage(image, fileType) {
     //this is the stuff that matters
-    window.progresselement = toolbar.appendChild(document.createElement("li"));
-
+    progresselement = toolbar.appendChild(document.createElement("li"));
+    progresselement.className = "uploadStatus";
     console.log(image);
 
     var hash = md5(image);
@@ -170,18 +164,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       });
       var data = await res.json();
 
-      if (data.status == "ok") {
-        textFieldEdit.insert(
-          textBox,
-          `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`
-        );
+      if (data.status === "ok") {
+        insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`);
         progresselement.remove();
       } else {
-        alert("error from scratch while uploading image");
+        alert(msg("upload-error"));
         progresselement.remove();
       }
     } catch (error) {
-      alert(error);
+      alert(msg("upload-error"));
       console.log(error);
       progresselement.remove();
     }

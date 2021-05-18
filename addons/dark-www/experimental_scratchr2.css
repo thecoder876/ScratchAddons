@@ -1,11 +1,11 @@
 html,
-body,
+html > body:not(.sa-body-editor),
 #pagewrapper {
   background: #202020;
   color: #fff;
   text-shadow: none;
 }
-label {
+html > body:not(.sa-body-editor) label {
   color: #fff;
 }
 a.black,
@@ -13,9 +13,14 @@ a.black:visited,
 input.link.black {
   color: #fff;
 }
-input,
-textarea,
-select,
+span.small-text {
+  color: rgba(255, 255, 255, 0.4);
+}
+html > body:not(.sa-body-editor) input,
+html > body:not(.sa-body-editor) textarea,
+html > body:not(.sa-body-editor) select,
+.editable-empty,
+.editable.read,
 .editable.write,
 .editable:hover {
   background-color: #282828;
@@ -23,10 +28,13 @@ select,
 }
 input,
 textarea {
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #606060;
+}
+.editable-empty [data-content="prompt"] {
+  color: rgba(255, 255, 255, 0.4);
 }
 .button,
-button,
+html > body:not(.sa-body-editor) button,
 .button:hover,
 button:hover,
 .button.grey,
@@ -41,11 +49,11 @@ button.grey,
 button.grey:hover {
   background-color: #282828;
   background-image: none;
-  color: var(--scratchr2-link-color, #fff);
+  color: var(--scratchr2-linkColor, #fff);
 }
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  color: var(--scratchr2-active-color, #ccc);
+  color: var(--scratchr2-activeColor, #ccc);
 }
 .box {
   background: #333;
@@ -65,10 +73,10 @@ button.grey:hover {
 .thumb img {
   border-color: #606060;
 }
-h1,
-h2,
-h3,
-h4 {
+html > body:not(.sa-body-editor) h1,
+html > body:not(.sa-body-editor) h2,
+html > body:not(.sa-body-editor) h3,
+html > body:not(.sa-body-editor) h4 {
   color: inherit;
 }
 .ui-widget-content {
@@ -90,6 +98,7 @@ h4 {
 }
 #footer {
   background-color: #333;
+  border-color: #606060; /* for infinite scrolling fixed footer */
   box-shadow: none;
 }
 #footer ul.footer-col li h4 {
@@ -100,10 +109,31 @@ h4 {
 }
 #topnav form.search .glass {
   border-right: none;
+  background: url("https://scratch.mit.edu/images/nav-search-glass.png") no-repeat center center;
+  background-size: 14px 14px;
+}
+#topnav form.search input[type="text"] {
+  background: rgba(0, 0, 0, 0.1);
+}
+#topnav form.search input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.75);
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: border-box;
+}
+.jqui-modal,
+.jqui-modal.ui-corner-all {
+  background: #282828;
+}
+.modal .modal-header,
+.jqui-modal .ui-dialog-titlebar.ui-widget-header {
+  background: var(--scratchr2-primaryColor, #4d97ff);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.ui-widget-content a {
+  color: #4d97ff;
 }
 #featured-project-modal .project.thumb {
   background: #282828;

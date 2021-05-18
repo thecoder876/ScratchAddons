@@ -1,9 +1,9 @@
-import LocalizationProvider from "../../libraries/l10n.js";
+import LocalizationProvider from "../../libraries/common/cs/l10n.js";
 
 export default class UserscriptLocalizationProvider extends LocalizationProvider {
   constructor(urls) {
     super();
-    this._urls = urls;
+    this._urls = new Set(urls);
     this.generalLoaded = false;
   }
 
@@ -20,14 +20,16 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
         resp = await fetch(url);
         messages = await resp.json();
       } catch (_) {
+        if (addonId === "_general") {
+          this._urls.delete(dir);
+        }
         continue;
       }
       addonMessages = Object.assign(messages, addonMessages);
       this.messages = Object.assign(messages, this.messages);
     }
-    this._generateCache(addonMessages);
     if (addonId === "_general") {
-      this._refreshDateTime();
+      this._reconfigure();
       this.generalLoaded = true;
     }
   }

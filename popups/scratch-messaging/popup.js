@@ -1,5 +1,5 @@
-import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
-import { escapeHTML } from "../../libraries/autoescaper.js";
+import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
+import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
 (async () => {
   if (window.parent === window) {
@@ -23,46 +23,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
     }
   });
 
-  const usedMessages = [
-    "scratch-messaging/send-error",
-    "scratch-messaging/deleting",
-    "scratch-messaging/delete-error",
-    "scratch-messaging/deleted",
-    "scratch-messaging/popup-title",
-    "scratch-messaging/open-new-tab",
-    "scratch-messaging/delete",
-    "scratch-messaging/delete-confirm",
-    "scratch-messaging/reply",
-    "scratch-messaging/posting",
-    "scratch-messaging/post",
-    "scratch-messaging/cancel",
-    "scratch-messaging/chars-left",
-    "scratch-messaging/follows",
-    "scratch-messaging/studio-invites",
-    "scratch-messaging/curate-invite",
-    "scratch-messaging/forum",
-    "scratch-messaging/forum-new-post",
-    "scratch-messaging/studio-activity",
-    "scratch-messaging/new-activity",
-    "scratch-messaging/remixes",
-    "scratch-messaging/remix-as",
-    "scratch-messaging/your-profile",
-    "scratch-messaging/others-profile",
-    "scratch-messaging/studio",
-    "scratch-messaging/loading",
-    "scratch-messaging/logged-out",
-    "scratch-messaging/disabled",
-    "scratch-messaging/settings",
-    "scratch-messaging/loading-comments",
-    "scratch-messaging/reload",
-    "scratch-messaging/no-unread",
-    "scratch-messaging/show-more",
-    "scratch-messaging/mark-as-read",
-    "scratch-messaging/marked-as-read",
-    "scratch-messaging/open-messages",
-  ];
-
-  await l10n.loadMessages(usedMessages);
+  await l10n.loadByAddonId("scratch-messaging");
 
   let dateNow = Date.now();
 
@@ -100,6 +61,22 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         window.open(url);
       },
       postComment() {
+        const shouldCaptureComment = (value) => {
+          // From content-scripts/cs.js
+          const regex = / scratch[ ]?add[ ]?ons/;
+          // Trim like scratchr2
+          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          return regex.test(limitedValue);
+        };
+        if (shouldCaptureComment(this.replyBoxValue)) {
+          alert(
+            chrome.i18n
+              .getMessage("captureCommentError", ["$1"])
+              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
+          );
+          return;
+        }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));
@@ -112,6 +89,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
                 content: this.replyBoxValue,
                 parent_id,
                 commentee_id: this.thisComment.authorId,
+                commenteeUsername: this.thisComment.author,
               },
             },
           },
@@ -189,7 +167,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         });
         const commentTimestamp = new Date(this.thisComment.date).getTime();
         const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
-        let options = { unit: null, divideBy: null };
+        let options;
         if (timeDiffSeconds < 60) return timeFormatter.format(0, "second");
         else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
         else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
@@ -226,6 +204,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
 
       follows: [],
       studioInvites: [],
+      studioPromotions: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -237,6 +216,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       messageTypeExtended: {
         follows: false,
         studioInvites: false,
+        studioPromotions: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -258,6 +238,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
         markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
         openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
+        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
       },
     },
     watch: {
@@ -266,6 +247,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         this.commentsProgress = 0;
         this.follows = [];
         this.studioInvites = [];
+        this.studioPromotions = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -297,13 +279,6 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           this.showAllMessages === false &&
           this.messages.length > this.showingMessagesAmt
         );
-      },
-      settingsLink() {
-        return l10n.escaped("scratch-messaging/disabled", {
-          settings: `<a href="/webpages/settings/index.html" target="_blank">${l10n.escaped(
-            "scratch-messaging/settings"
-          )}</a>`,
-        });
       },
     },
     created() {
@@ -361,11 +336,12 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: projectId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
-          loves: 0,
-          favorites: 0,
+          loveCount: 0,
+          favoriteCount: 0,
+          loversAndFavers: [],
           loadedComments: false,
         };
         this.projects.push(obj);
@@ -388,7 +364,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: studioId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
           loadedComments: false,
@@ -423,19 +399,24 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             },
             (comments) => {
               if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId in comments) {
+              for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
                 Vue.set(this.comments, commentId, commentObject);
-                const chainId = commentObject.childOf || commentId;
-                const resourceGetFunction =
-                  resourceType === "project"
-                    ? "getProjectObject"
-                    : resourceType === "user"
-                    ? "getProfileObject"
-                    : "getStudioObject";
-                const resourceObject = this[resourceGetFunction](resourceId);
-                if (!resourceObject.commentChains.includes(chainId)) resourceObject.commentChains.push(chainId);
               }
+
+              // Preserve chronological sort when using JSON API
+              const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+              const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+              const sortedIds = sortedParentComments.map((arr) => arr[0]);
+              const resourceGetFunction =
+                resourceType === "project"
+                  ? "getProjectObject"
+                  : resourceType === "user"
+                  ? "getProfileObject"
+                  : "getStudioObject";
+              const resourceObject = this[resourceGetFunction](resourceId);
+              for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
               elementObject.loadedComments = true;
               resolve();
             }
@@ -452,29 +433,33 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         const messagesToCheck =
           this.msgCount > 40 ? this.messages.length : showAll ? this.messages.length : this.msgCount;
         this.showingMessagesAmt = messagesToCheck;
-        for (const indexString in this.messages.slice(0, messagesToCheck)) {
-          const index = Number(indexString);
-          const message = this.messages[index];
+        for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {
             this.follows.push(message.actor_username);
           } else if (message.type === "curatorinvite") {
             this.studioInvites.push({
               actor: message.actor_username,
               studioId: message.gallery_id,
-              studioTitle: htmlToText(message.title),
+              studioTitle: message.title,
+            });
+          } else if (message.type === "becomeownerstudio") {
+            this.studioPromotions.push({
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
             });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
               this.forumActivity.push({
                 topicId: message.topic_id,
-                topicTitle: htmlToText(message.topic_title),
+                topicTitle: message.topic_title,
               });
             }
           } else if (message.type === "remixproject") {
             this.remixes.push({
-              parentTitle: htmlToText(message.parent_title),
-              remixTitle: htmlToText(message.title),
+              parentTitle: message.parent_title,
+              remixTitle: message.title,
               actor: message.actor_username,
               projectId: message.project_id,
             });
@@ -483,13 +468,21 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
               this.studioActivity.push({
                 studioId: message.gallery_id,
-                studioTitle: htmlToText(message.title),
+                studioTitle: message.title,
               });
             }
           } else if (message.type === "loveproject") {
-            this.getProjectObject(message.project_id, message.title).loves++;
+            const projectObject = this.getProjectObject(message.project_id, message.title);
+            projectObject.loveCount++;
+            const findLover = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
+            if (findLover) findLover.loved = true;
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
           } else if (message.type === "favoriteproject") {
-            this.getProjectObject(message.project_id, message.project_title).favorites++;
+            const projectObject = this.getProjectObject(message.project_id, message.project_title);
+            projectObject.favoriteCount++;
+            const findFaver = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
+            if (findFaver) findFaver.faved = true;
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
           } else if (message.type === "addcomment") {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
@@ -550,6 +543,18 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         >${escapeHTML(invite.studioTitle)}</a>`;
         return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
       },
+      studioPromotionHTML(promotion) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${promotion.actor}/"
+        >${promotion.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
+      },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
             rel="noopener noreferrer"
@@ -588,11 +593,26 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       studioText(title) {
         return l10n.get("scratch-messaging/studio", { title });
       },
+      projectLoversAndFavers(project) {
+        // First lovers&favers, then favers-only, then lovers only. Lower is better
+        const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
+        let str = "";
+        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
+          const priorityA = priorityOf(a);
+          const priorityB = priorityOf(b);
+          if (priorityA > priorityB) return 1;
+          else if (priorityB > priorityA) return -1;
+          else return 0;
+        });
+        arr.forEach((obj, i) => {
+          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
+          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
+          str += " ";
+          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
+          if (i !== arr.length - 1) str += "<br>";
+        });
+        return str;
+      },
     },
   });
-
-  function htmlToText(html) {
-    // compat
-    return escapeHTML(html);
-  }
 })();

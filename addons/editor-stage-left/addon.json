@@ -1,7 +1,6 @@
 {
   "name": "Display stage on left side",
   "description": "Moves the stage to the left side of the editor.",
-  "notice": "Refresh the editor after enabling/disabling this theme.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -13,13 +12,16 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userstyles": [
     {
       "url": "stageleft.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "theme", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

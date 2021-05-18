@@ -1,22 +1,30 @@
 export default async function ({ addon, console, msg }) {
-  if (addon.settings.get("projectsharing"))
-    actionAlert("[class*='share-button_share-button'], .banner-button", msg("share"));
-  if (addon.settings.get("followinguser")) actionAlert(".follow-button", msg("follow"));
-  if (addon.settings.get("joiningstudio")) actionAlert("a.accept", msg("joinstudio"));
-  async function actionAlert(queryButton, res) {
-    while (true) {
-      let button = await addon.tab.waitForElement(queryButton, { markAsSeen: true });
-      let canAction = false;
-      button.addEventListener("click", function (e) {
-        if (!canAction) {
-          e.cancelBubble = true;
+  document.addEventListener(
+    "click",
+    (e) => {
+      let cancelMessage = null;
+      if (
+        addon.settings.get("projectsharing") &&
+        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
+      ) {
+        cancelMessage = msg("share");
+      } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
+        cancelMessage = msg("follow");
+      } else if (
+        /^\/studios\/\d+\/curators/g.test(location.pathname) &&
+        addon.settings.get("joiningstudio") &&
+        (e.target.closest("a.accept") ||
+          (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
+      ) {
+        cancelMessage = msg("joinstudio");
+      }
+      if (cancelMessage !== null) {
+        if (!confirm(cancelMessage)) {
           e.preventDefault();
-          if (confirm(res)) {
-            canAction = true;
-            button.click();
-          }
-        } else canAction = false;
-      });
-    }
-  }
+          e.stopPropagation();
+        }
+      }
+    },
+    true
+  );
 }

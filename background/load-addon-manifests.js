@@ -1,15 +1,44 @@
 (async function () {
   const folderNames = await (await fetch("/addons/addons.json")).json();
+  folderNames.forEach((addonId, i) => {
+    if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
+  });
   await scratchAddons.l10n.load(folderNames);
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
-    for (const prop of ["name", "description", "notice", "warning"]) {
-      if (manifest.l10n && manifest[prop] && !useDefault) {
-        manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+    if (manifest.l10n && !useDefault) {
+      for (const prop of ["name", "description"]) {
+        if (manifest[prop]) manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+      }
+      if (manifest.info) {
+        for (const info of manifest.info || []) {
+          info.text = scratchAddons.l10n.get(`${folderName}/@info-${info.id}`, {}, info.text);
+        }
+      }
+      if (manifest.popup) {
+        manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
       }
     }
+    for (const propName of ["userscripts", "userstyles"]) {
+      for (const injectable of manifest[propName] || []) {
+        const { matches } = injectable;
+        if (typeof matches === "string" && matches.startsWith("^")) {
+          injectable._scratchDomainImplied = !matches.startsWith("^https:");
+          injectable.matches = new RegExp(matches, "u");
+        } else if (Array.isArray(matches)) {
+          for (let i = matches.length; i--; ) {
+            const match = matches[i];
+            if (typeof match === "string" && match.startsWith("^")) {
+              matches[i] = new RegExp(match, "u");
+              matches[i]._scratchDomainImplied = !match.startsWith("^https:");
+            }
+          }
+        }
+      }
+    }
+
     for (const preset of manifest.presets || []) {
       for (const prop of ["name", "description"]) {
         if (manifest.l10n && preset[prop] && !useDefault) {
@@ -30,6 +59,7 @@
             studioAddIcon: "@studio-add.svg",
             studioIcon: "@studio.svg",
             remixIcon: "@remix.svg",
+            adminusersIcon: "@adminusers.svg",
           },
           option.name
         );

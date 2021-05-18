@@ -1,9 +1,7 @@
 export default async function ({ addon, global, console }) {
-  console.log("mouse pos enabled");
-
   let pos = null;
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   vm.runtime.ioDevices.mouse.__scratchX = vm.runtime.ioDevices.mouse._scratchX;
   vm.runtime.ioDevices.mouse.__scratchY = vm.runtime.ioDevices.mouse._scratchY;
@@ -20,7 +18,7 @@ export default async function ({ addon, global, console }) {
     set: function (setx) {
       x = setx;
       showUpdatedValue();
-      return (this.__scratchX = setx);
+      this.__scratchX = setx;
     },
   });
 
@@ -31,18 +29,23 @@ export default async function ({ addon, global, console }) {
     set: function (sety) {
       y = sety;
       showUpdatedValue();
-      return (this.__scratchY = sety);
+      this.__scratchY = sety;
     },
   });
 
   hideInSmallStageMode({ addon });
 
   while (true) {
-    let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
+    let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
 
     if (addon.tab.editorMode === "editor") {
       // my attempt at detecting if they're in the editor?
       var posContainerContainer = document.createElement("div");
+      addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
+
       var posContainer = document.createElement("div");
       pos = document.createElement("span");
 
@@ -61,12 +64,15 @@ export default async function ({ addon, global, console }) {
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
 
-    document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".pos-container-container").style.display = "none";
     });
-    document.querySelector(".stage-header_stage-button-last_eeKZ4").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
       document.querySelector(".pos-container-container").style.display = "";
     });
   }

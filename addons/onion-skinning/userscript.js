@@ -367,14 +367,11 @@ export default async function ({ addon, global, console, msg }) {
     });
 
   const getSelectedCostumeIndex = () => {
-    const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
-    for (let i = 0; i < costumeList.length; i++) {
-      const item = costumeList[i].firstChild;
-      if (item && item.className.includes("is-selected")) {
-        return i;
-      }
-    }
-    return -1;
+    const item = document.querySelector("[class*='selector_list-item'][class*='sprite-selector-item_is-selected']");
+    if (!item) return -1;
+    const numberEl = item.querySelector("[class*='sprite-selector-item_number']");
+    if (!numberEl) return -1;
+    return +numberEl.textContent - 1;
   };
 
   const updateOnionLayers = async () => {
@@ -389,7 +386,7 @@ export default async function ({ addon, global, console, msg }) {
 
     removeOnionLayers();
 
-    const vm = addon.tab.traps.onceValues.vm;
+    const vm = addon.tab.traps.vm;
     if (!vm) {
       return;
     }
@@ -726,6 +723,8 @@ export default async function ({ addon, global, console, msg }) {
     while (true) {
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
+        reduxCondition: (state) =>
+          state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");

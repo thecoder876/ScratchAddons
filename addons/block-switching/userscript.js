@@ -279,7 +279,6 @@ export default async function ({ addon, global, console, msg }) {
     blockSwitches["control_forever"] = [
       {
         opcode: "control_repeat_until",
-        remap: { SUBSTACK: "split" },
       },
       noopSwitch,
     ];
@@ -428,11 +427,13 @@ export default async function ({ addon, global, console, msg }) {
       noopSwitch,
       {
         opcode: "data_changevariableby",
+        remapValueType: { VALUE: "math_number" },
       },
     ];
     blockSwitches["data_changevariableby"] = [
       {
         opcode: "data_setvariableto",
+        remapValueType: { VALUE: "text" },
       },
       noopSwitch,
     ];
@@ -597,8 +598,7 @@ export default async function ({ addon, global, console, msg }) {
     const pasteSeparately = [];
     // Apply input remappings.
     if (opcodeData.remap) {
-      const childNodes = Array.from(xml.children);
-      for (const child of childNodes) {
+      for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
         const newName = opcodeData.remap[oldName];
         if (newName) {
@@ -617,6 +617,18 @@ export default async function ({ addon, global, console, msg }) {
           } else {
             child.setAttribute("name", newName);
           }
+        }
+      }
+    }
+    if (opcodeData.remapValueType) {
+      for (const child of Array.from(xml.children)) {
+        const name = child.getAttribute("name");
+        const newType = opcodeData.remapValueType[name];
+        if (newType) {
+          const valueNode = child.firstChild;
+          const fieldNode = valueNode.firstChild;
+          valueNode.setAttribute("type", newType);
+          fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
         }
       }
     }
@@ -656,6 +668,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const customContextMenuHandler = function (options) {
+    if (addon.self.disabled) return;
+
     if (addon.settings.get("border")) {
       addBorderToContextMenuItem = options.length;
     }
@@ -682,7 +696,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const injectCustomContextMenu = (block) => {
     const type = block.type;
-    if (!blockSwitches.hasOwnProperty(type)) {
+    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
       return;
     }
 
@@ -711,6 +725,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const mutationObserverCallback = (mutations) => {
+    if (addon.self.disabled) return;
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node.classList.contains("blocklyContextMenu")) {
@@ -740,6 +755,12 @@ export default async function ({ addon, global, console, msg }) {
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
     workspace.addChangeListener(changeListener);
+    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
+    if (languageSelector) {
+      languageSelector.addEventListener("change", () => {
+        setTimeout(inject);
+      });
+    }
   };
 
   const mutationObserver = new MutationObserver(mutationObserverCallback);

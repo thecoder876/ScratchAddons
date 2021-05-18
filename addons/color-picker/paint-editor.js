@@ -1,5 +1,5 @@
-import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
+import { normalizeHex, getHexRegex } from "../../libraries/common/cs/normalize-color.js";
+import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
@@ -13,7 +13,7 @@ export default async ({ addon, console, msg }) => {
     } else if (state.scratchPaint.modals.strokeColor) {
       fillOrStroke = "stroke";
     } else {
-      fillOrStroke = "ihadastroke";
+      // fillOrStroke = "ihadastroke";
       return;
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
@@ -45,7 +45,10 @@ export default async ({ addon, console, msg }) => {
     element.children[1].children[0].click();
   };
   while (true) {
-    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
+    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
     rateLimiter.abort(false);
     addon.tab.redux.initialize();
     if (addon.tab.redux && typeof prevEventHandler === "function") {
@@ -62,8 +65,9 @@ export default async ({ addon, console, msg }) => {
       type: "color",
       value: defaultColor || "#000000",
     });
+    const inputClass = document.querySelector('[class*="fixed-tools_costume-input"]').className.split(" ")[0];
     const saColorPickerText = Object.assign(document.createElement("input"), {
-      className: "sa-color-picker-text sa-color-picker-paint-text",
+      className: `sa-color-picker-text sa-color-picker-paint-text ${inputClass}`,
       type: "text",
       pattern: "^#?([0-9a-fA-F]{3}){1,2}$",
       placeholder: msg("hex"),

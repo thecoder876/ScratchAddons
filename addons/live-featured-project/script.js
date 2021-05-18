@@ -15,6 +15,7 @@ export default async function ({ addon, msg }) {
   iframeElement.setAttribute("height", "210");
   iframeElement.setAttribute("frameborder", "0");
   iframeElement.setAttribute("allowfullscreen", "");
+  iframeElement.setAttribute("scrolling", "no");
 
   const wrapperElement = document.createElement("div");
   wrapperElement.id = "lfp-embed";
@@ -48,8 +49,8 @@ export default async function ({ addon, msg }) {
         "load",
         function callback() {
           const observer = new MutationObserver(() => {
-            if (iframeElement.contentDocument.querySelector(".loader_fullscreen_29EhP") === null) {
-              iframeElement.contentDocument.querySelector(".green-flag_green-flag_1kiAo").click();
+            if (iframeElement.contentDocument.querySelector("[class^='loader_fullscreen']") === null) {
+              iframeElement.contentDocument.querySelector("[class^='green-flag_green-flag']").click();
               observer.disconnect();
             }
           });

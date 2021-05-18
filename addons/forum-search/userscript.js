@@ -36,7 +36,7 @@ function appendSearch(box, query, page, term, msg) {
   currentPage = page;
   box.appendChild(loading);
   window
-    .fetch(`https://scratchdb.lefty.one/v2/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
+    .fetch(`https://scratchdb.lefty.one/v3/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
     .catch((err) => {
       box.removeChild(box.lastChild);
       box.appendChild(document.createTextNode(msg("error")));
@@ -108,7 +108,7 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        if (locationQuery != "") {
+        if (locationQuery !== "") {
           let userPostButton = document.createElement("a");
           userPostButton.appendChild(document.createTextNode(msg("posts-here")));
           userPostButton.addEventListener("click", () => {
@@ -162,7 +162,7 @@ function appendSearch(box, query, page, term, msg) {
         postHTML.insertAdjacentHTML("beforeend", cleanPost(post.content.html));
         postMsg.appendChild(postHTML);
 
-        if (post.editor != null) {
+        if (post.editor) {
           let postEdit = document.createElement("p");
           postEdit.classList = "postedit";
           let postEditMessage = document.createElement("em");
@@ -191,7 +191,7 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";
@@ -201,7 +201,7 @@ export default async function ({ addon, global, console, msg }) {
   let pathSplit = window.location.pathname.split("/");
   let searchPlaceholder = msg("placeholder");
   switch (pathSplit.length) {
-    case 5:
+    case 5: {
       let topicTitle = document
         .getElementsByClassName("linkst")[0]
         .getElementsByTagName("li")[2]
@@ -210,11 +210,13 @@ export default async function ({ addon, global, console, msg }) {
       locationQuery = ` +topic:${pathSplit[3]}`;
       searchPlaceholder = msg("search-topic", { topic: topicTitle });
       break;
-    case 4:
+    }
+    case 4: {
       let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
       locationQuery = ` +category:"${category}"`;
       searchPlaceholder = msg("search-cat", { cat: category });
       break;
+    }
   }
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
@@ -254,7 +256,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   searchDropdown.addEventListener("change", (e) => {
-    if (searchBar.value != "") {
+    if (searchBar.value !== "") {
       triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     }
   });

@@ -2,6 +2,16 @@
 #brdheader {
   background: #075e46;
 }
+#forum-search-form {
+  background-color: inherit;
+  border-top-color: #606060;
+}
+#forum-search-dropdown {
+  border-color: #606060;
+}
+.forum-search-list .blockpost {
+  color: #fff;
+}
 .blockpost .box-content,
 .postright,
 .postfootright {
@@ -30,7 +40,7 @@
 .djangobb td,
 .djangobb th,
 .djangobb blockquote,
-.markItUpPreviewFrame {
+.code {
   border-color: #606060;
 }
 .postright,
@@ -42,7 +52,8 @@
 .blockpost label {
   box-shadow: 1px 0 #606060;
 }
-.djangobb blockquote {
+.djangobb blockquote,
+.code {
   background: #333;
 }
 .djangobb hr {
@@ -74,6 +85,17 @@
   background-color: #606060;
   color: transparent;
 }
-.markItUpHeader > ul > li:hover {
-  background-color: #fff;
+.markItUpHeader > ul > li.uploadStatus {
+  background: transparent !important;
+}
+.markItUpPreviewFrame {
+  border-color: #606060 !important;
+  background: transparent;
+}
+.my-ocular-reaction-button {
+  background-color: #606060;
+  box-shadow: 0 0 2px #075e46;
+}
+.my-ocular-reaction-button.selected {
+  background-color: #075e46;
 }

@@ -17,6 +17,9 @@
   "changelog": {
     "message": "View changelog"
   },
+  "notifChangelog": {
+    "message": "View Changelog"
+  },
   "15min": {
     "message": "For 15 minutes"
   },
@@ -43,6 +46,12 @@
   },
   "beta": {
     "message": "Beta"
+  },
+  "danger": {
+    "message": "Dangerous"
+  },
+  "dangerWarning": {
+    "message": "Are you sure you want to enable the \"$1\" addon?"
   },
   "forums": {
     "message": "Forums"
@@ -71,11 +80,38 @@
   "editorFeatures": {
     "message": "Scratch Editor Features"
   },
+  "costumeEditorFeatures": {
+    "message": "Costume Editor"
+  },
+  "codeEditorFeatures": {
+    "message": "Code Editor"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
+  "profilesFeatures": {
+    "message": "Profiles"
+  },
+  "projectPlayerFeatures": {
+    "message": "Project Player"
+  },
+  "projectPageFeatures": {
+    "message": "Project Pages"
+  },
+  "others": {
+    "message": "Others"
+  },
   "themes": {
     "message": "Themes"
+  },
+  "editorThemes": {
+    "message": "Editor Themes"
+  },
+  "websiteThemes": {
+    "message": "Website Themes"
+  },
+  "popupFeatures": {
+    "message": "Extension Popup Features"
   },
   "theme": {
     "message": "Theme:"
@@ -107,6 +143,9 @@
   "reset": {
     "message": "Reset"
   },
+  "default": {
+    "message": "Default"
+  },
   "presets": {
     "message": "Presets"
   },
@@ -136,6 +175,9 @@
   },
   "recommendedTooltip": {
     "message": "This is recommended by Scratch Addons. Try it out!"
+  },
+  "dangerTooltip": {
+    "message": "Use with caution. Make sure to understand what this addon does before enabling."
   },
   "betaTooltip": {
     "message": "Keep in mind that this addon might have bugs."
@@ -188,34 +230,108 @@
   "extensionUpdate": {
     "message": "Scratch Addons extension update"
   },
+  "extensionHasUpdated": {
+    "message": "Scratch Addons has updated to v$1"
+  },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 for animating in the editor. Go to $3 to enable it."
-  },
-  "newFeature": {
-    "message": "New feature"
-  },
-  "onionSkin": {
-    "message": "onion skinning"
+    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Speak another language? $1"
-  },
-  "helpTranslateScratchAddons": {
-    "message": "Help translate Scratch Addons"
-  },
-  "fullChangelog": {
-    "message": "See full $1 changelog"
+    "message": "This update also ships a more organized Scratch Addons settings page, as well as performance improvements when using addons in the project editor."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
-  "onionSkinAlt": {
-    "message": "Dog inside costume editor with Onion Skinning enabled. Credit to Scratch sprite library."
-  },
   "new": {
     "message": "New!"
+  },
+  "enabled": {
+    "message": "Enabled",
+    "description": "Used as a category name for enabled addons"
+  },
+  "exportAndImportSettings": {
+    "message": "Export and Import Settings"
+  },
+  "exportAndImportSettingsDescription": {
+    "message": "Export settings as a JSON file for use on other computers."
+  },
+  "useBrowserSync": {
+    "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
+  },
+  "export": {
+    "message": "Export Settings"
+  },
+  "import": {
+    "message": "Import Settings"
+  },
+  "fileNotSelected": {
+    "message": "Please select a settings file."
+  },
+  "importSuccess": {
+    "message": "Settings have been imported successfully. Scratch Addons will reload."
+  },
+  "importFailed": {
+    "message": "The settings file is invalid. Please try again."
+  },
+  "confirmImport": {
+    "message": "Confirm"
+  },
+  "quickSettings": {
+    "message": "Addons"
+  },
+  "runningOnThisPage": {
+    "message": "Addons on this tab"
+  },
+  "recentlyUsed": {
+    "message": "Recently used",
+    "description": "Used as a category name for recently used addons"
+  },
+  "settingsPagePermission": {
+    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+  },
+  "openFullSettings": {
+    "message": "Open full screen settings"
+  },
+  "skipOpenFullSettings": {
+    "message": "Cancel"
+  },
+  "exploreAllAddons": {
+    "message": "Explore all $1 addons:",
+    "description": "Placeholder is a number. Example: explore all 80+ addons"
+  },
+  "captureCommentError": {
+    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+  },
+  "captureCommentPolicy": {
+    "message": "Scratch Community's Browser Extension/Userscript Policy"
+  },
+  "captureCommentPostAnyway": {
+    "message": "Post anyway"
+  },
+  "captureCommentConfirm": {
+    "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
+  },
+  "extensionStoreDescription1": {
+    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+  },
+  "extensionStoreDescription2": {
+    "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!"
+  },
+  "extensionStoreDescription3": {
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
+  },
+  "extensionStoreDescription4": {
+    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
+  },
+  "extensionStoreDescription5": {
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
+  },
+  "extensionStoreDescription6": {
+    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
   }
 }

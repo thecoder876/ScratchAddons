@@ -1,23 +1,25 @@
-import Auth from "../common/Auth.js";
-import Account from "../common/Account.js";
-import fetch from "../common/fetch.js";
+import Addon from "../common/Addon.js";
 import Tab from "./Tab.js";
-import Settings from "../common/Settings.js";
 
-export default class Addon {
+/**
+ * An addon that loads as a userscript.
+ * @extends Addon
+ * @property {Tab} tab
+ */
+export default class UserscriptAddon extends Addon {
   constructor(info) {
-    const { id } = info;
-    const path = document.getElementById("scratch-addons").getAttribute("data-path");
-    this.self = {
-      id,
-      dir: `${path}addons/${id}`,
-      browser: typeof InstallTrigger !== "undefined" ? "firefox" : "chrome",
-      lib: `${path}libraries`,
-    };
-    this.auth = new Auth(this);
-    this.account = new Account();
-    this.fetch = fetch;
+    super(info);
+    this._addonId = info.id;
+    this.__path = `${new URL(import.meta.url).origin}/`;
     this.tab = new Tab(info);
-    this.settings = new Settings(this);
+    this.self.disabled = false;
+    this.self.enabledLate = info.enabledLate;
+  }
+
+  /**
+   * @private
+   */
+  get _path() {
+    return this.__path;
   }
 }

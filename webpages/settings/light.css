@@ -1,18 +1,13 @@
-html {
-  background: white;
+:root {
+  --accent-1: #f7f7f7;
+  --accent-2: #f7f7f7;
+  --accent-3: #ecebeb;
+  --accent-4: #555;
+  --accent-5: #222;
 }
 
 body {
-  background: #ffffff;
   color: #222;
-}
-
-.categories-block {
-  background: #ecebeb;
-}
-
-.category img {
-  filter: brightness(0);
 }
 
 .search-box {
@@ -62,9 +57,29 @@ body {
 }
 
 .addon-body {
-  background: #f7f7f7;
-  border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.addon-body:target {
+  animation: addonBlinkLight 2s 1;
+}
+
+@keyframes addonBlinkLight {
+  10% {
+    border: 1px solid #f7f7f7;
+  }
+  25% {
+    border: 1px solid #7e7e7e;
+  }
+  50% {
+    border: 1px solid #f7f7f7;
+  }
+  75% {
+    border: 1px solid #7e7e7e;
+  }
+  100% {
+    border: 1px solid #f7f7f7;
+  }
 }
 
 .addon-description {
@@ -79,29 +94,27 @@ body {
 .addon-warn {
   color: black;
 }
-
-.addon-notice img {
-  filter: brightness(0);
+.addon-warn img {
+  filter: none;
 }
 
-.addon-body img {
+img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
 }
-
+.icon-type,
+.btn-dropdown img,
+.categories-shrink img,
+.category img,
+.addon-group > span > img,
+.addon-group > span:after {
+  filter: invert(1) brightness(0);
+}
 .btn-dropdown:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.addon-name {
-  font-weight: 400;
-}
-
 .category.sel {
   font-weight: 600;
-}
-
-.setting-label {
-  color: #555;
 }
 
 .addon-credits a,
@@ -120,12 +133,11 @@ body {
   background: #efefef;
   border: 1px solid #acacac;
 }
-.large-button:hover {
+.large-button:hover:not([disabled]) {
   background: #aaaaaa;
 }
 
 .small-button {
-  background: #c9c8c8;
   border-color: #666;
   color: #222;
 }
@@ -146,20 +158,29 @@ body {
 .close {
   filter: invert(1);
 }
-.modal-content img {
-  filter: invert(1);
-}
+
 .setting-body {
   background: #f7f7f7;
   border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.setting-body img {
-  filter: invert(100%) brightness(0);
+.setting-dropdown.open .clear-button,
+.setting-dropdown li:hover {
+  background: #aaaaaa;
 }
-.categories-shrink {
+.setting-dropdown ul,
+.setting-dropdown .reset-preview span {
+  border-color: #acacac;
+}
+
+#running-page {
+  background-color: #ffffff;
+}
+
+#popup-more-settings > button {
   filter: brightness(0);
 }
-.collapsed {
-  width: 0px;
+color-picker#picker {
+  --color-picker-background-color: #fff !important;
+  --color-picker-color: #222 !important;
 }
